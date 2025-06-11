@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Marks</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body bgcolor="lightblue">
+<center>
+  <table border="1" cellspacing="5" bgcolor="white">
+    <caption><b>Input Marks</b></caption>
+    <tr>
+      <th rowspan="2">Name</th>
+      <th colspan="4">Score</th>
+    </tr>
+    <tr>
+      <th>Hindi</th>
+      <th>English</th>
+      <th>Math</th>
+      <th>C Programming</th>
+    </tr>
+    <tr>
+      <td><input type="text" id="aname"></td>
+      <td><input type="text" id="am"></td>
+      <td><input type="text" id="aj"></td>
+      <td><input type="text" id="ad"></td>
+      <td><input type="text" id="an"></td>
+    </tr>
+    <tr>
+      <th colspan="5" height="30">
+        <input type="submit" value="Add To Table" onclick="Sub()">
+      </th>
+    </tr>
+  </table>
+
+  <br>
+
+  <table border="1" cellspacing="5" bgcolor="white"
+         height="100" width="500" cellpadding="5" id="TableScore">
+    <caption><b>Student Data</b></caption>
+    <tr>
+      <th width="180">Name</th>
+      <th>Total</th>
+      <th>Average</th>
+      <th>Pass Or Fail</th>
+    </tr>
+  </table>
+
+  <br>
+  <button onclick="downloadPDF()">Download PDF</button>
+</center>
+
+<script type="text/javascript">
+  function Sub(){
+    let n = document.getElementById('aname').value;
+    let k = parseFloat(document.getElementById('am').value);
+    let r = parseFloat(document.getElementById('aj').value);
+    let e = parseFloat(document.getElementById('ad').value);
+    let v = parseFloat(document.getElementById('an').value);
+    
+    let sum = k + r + e + v;
+    let avg = sum / 4;
+    
+    let newTable = document.getElementById('TableScore');
+    let row = newTable.insertRow(-1);
+    let cell1 = row.insertCell(0);
+    let cell2 = row.insertCell(0);
+    let cell3 = row.insertCell(0);
+    let cell4 = row.insertCell(0);
+
+    cell4.innerHTML = n;
+    cell3.innerHTML = sum;
+    cell2.innerHTML = avg.toFixed(2);
+    
+    if (avg >= 70) {
+      cell1.innerHTML = "<font color=green>Pass</font>";
+    } else {
+      cell1.innerHTML = "<font color=red>Fail</font>";
+    }
+  }
+
+  async function downloadPDF() {
+  const { jsPDF } = window.jspdf;
+
+  // Detect screen width and adjust orientation & layout
+  const isWideScreen = window.innerWidth > 768;
+  const orientation = isWideScreen ? "landscape" : "portrait";
+  const doc = new jsPDF({ orientation });
+
+  const table = document.getElementById("TableScore");
+
+  // Extract table rows
+  let rows = [];
+  for (let i = 1; i < table.rows.length; i++) {
+    let row = table.rows[i];
+    let rowData = [];
+    for (let j = 0; j < row.cells.length; j++) {
+      rowData.push(row.cells[j].innerText || row.cells[j].textContent);
+    }
+    rows.push(rowData);
+  }
+
+  const fontSize = isWideScreen ? 12 : 10;
+  const margin = isWideScreen ? 20 : 14;
+
+  doc.autoTable({
+    head: [["Name", "Total", "Average", "Pass or Fail"]],
+    body: rows,
+    startY: margin + 5,
+    margin: { top: margin },
+    styles: {
+      fontSize: fontSize,
+      cellPadding: 3
+    },
+    didDrawPage: function (data) {
+      // Header
+      doc.setFontSize(fontSize + 2);
+      doc.setTextColor(40);
+      doc.text("Student Data Table", margin, margin);
+
+      // Footer (page number)
+      const pageSize = doc.internal.pageSize;
+      const pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight();
+      const pageNum = doc.internal.getNumberOfPages();
+      doc.setFontSize(fontSize - 2);
+      doc.text("Page " + pageNum, margin, pageHeight - 10);
+    }
+  });
+
+  doc.save("Student_Data_Responsive.pdf");
+}
+
+</script>
+
+</body>
+</html>
