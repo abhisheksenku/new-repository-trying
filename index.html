@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Expense & Income Tracker</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <div class="container">
+    <h1>Income & Expense Dashboard</h1>
+
+    <div class="filters">
+      <button class="filter-btn" data-filter="daily">Daily</button>
+      <button class="filter-btn" data-filter="weekly">Weekly</button>
+      <button class="filter-btn" data-filter="monthly">Monthly</button>
+    </div>
+
+    <table id="reportTable">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Description</th>
+          <th>Category</th>
+          <th>Type</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Example data row -->
+        <!-- Real data should come from backend later -->
+      </tbody>
+    </table>
+
+    <button id="downloadBtn" disabled>Download Report</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
